@@ -485,9 +485,6 @@ defmodule Combine.Parsers.Text do
         %{state | :column => col + len, :input => rest, results: [word|results]}
     end
   end
-  defp word_of_impl(%ParserState{status: :ok} = state, _pattern) do
-    %{state | :status => :error, :error => "Expected word, but hit end of input."}
-  end
 
   @doc """
   Parses an integer value from the input.
