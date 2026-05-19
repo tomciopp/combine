@@ -429,7 +429,7 @@ defmodule Combine.Parsers.Text do
     when is_binary(expected) do
       byte_size = :erlang.size(expected)
       case input do
-        <<^expected::binary-size(byte_size), rest::binary>> ->
+        <<^expected::binary-size(^byte_size), rest::binary>> ->
           new_col = col + String.length(expected)
           %{state | :column => new_col, :input => rest, :results => [expected|results]}
         _ ->

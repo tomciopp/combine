@@ -23,7 +23,7 @@ defmodule Combine.Parsers.Binary do
   @spec bits(previous_parser, pos_integer) :: parser
   defparser bits(%ParserState{status: :ok, column: col, input: input, results: results} = state, n) when is_integer(n) do
     case input do
-      <<bits::bitstring-size(n), rest::bitstring>> ->
+      <<bits::bitstring-size(^n), rest::bitstring>> ->
         %{state | :column => col + n, :input => rest, :results => [bits|results]}
       _ ->
         %{state | :status => :error, :error => "Expected #{n} bits starting at position #{col + 1}, but encountered end of input."}
@@ -45,7 +45,7 @@ defmodule Combine.Parsers.Binary do
   defparser bytes(%ParserState{status: :ok, column: col, input: input, results: results} = state, n) when is_integer(n) do
     bits_size = n * 8
     case input do
-      <<bits::bitstring-size(bits_size), rest::bitstring>> ->
+      <<bits::bitstring-size(^bits_size), rest::bitstring>> ->
         %{state | :column => col + bits_size, :input => rest, :results => [bits|results]}
       _ ->
         %{state | :status => :error, :error => "Expected #{n} bytes starting at position #{col + 1}, but encountered end of input."}
@@ -67,14 +67,14 @@ defmodule Combine.Parsers.Binary do
     case endianness do
       :be ->
         case input do
-          <<int::big-unsigned-size(size), rest::bitstring>> ->
+          <<int::big-unsigned-size(^size), rest::bitstring>> ->
             %{state | :column => col + size, :input => rest, :results => [int|results]}
           _ ->
             %{state | :status => :error, :error => "Expected #{size}-bit, unsigned, big-endian integer starting at position #{col + 1}."}
         end
       :le ->
         case input do
-          <<int::little-unsigned-size(size), rest::bitstring>> ->
+          <<int::little-unsigned-size(^size), rest::bitstring>> ->
             %{state | :column => col + size, :input => rest, :results => [int|results]}
           _ ->
             %{state | :status => :error, :error => "Expected #{size}-bit, unsigned, little-endian integer starting at position #{col + 1}."}
@@ -98,14 +98,14 @@ defmodule Combine.Parsers.Binary do
     case endianness do
       :be ->
         case input do
-          <<int::big-signed-size(size), rest::bitstring>> ->
+          <<int::big-signed-size(^size), rest::bitstring>> ->
             %{state | :column => col + size, :input => rest, :results => [int|results]}
           _ ->
             %{state | :status => :error, :error => "Expected #{size}-bit, signed, big-endian integer starting at position #{col + 1}."}
         end
       :le ->
         case input do
-          <<int::little-signed-size(size), rest::bitstring>> ->
+          <<int::little-signed-size(^size), rest::bitstring>> ->
             %{state | :column => col + size, :input => rest, :results => [int|results]}
           _ ->
             %{state | :status => :error, :error => "Expected #{size}-bit, signed, little-endian integer starting at position #{col + 1}."}
@@ -125,7 +125,7 @@ defmodule Combine.Parsers.Binary do
   @spec float(previous_parser, 32 | 64) :: parser
   defparser float(%ParserState{status: :ok, column: col, input: input, results: results} = state, size) when is_integer(size) do
     case input do
-      <<num::float-size(size), rest::bitstring>> ->
+      <<num::float-size(^size), rest::bitstring>> ->
         %{state | :column => col + size, :input => rest, :results => [num|results]}
       _ ->
         %{state | :status => :error, :error => "Expected #{size}-bit, floating point number starting at position #{col + 1}."}
