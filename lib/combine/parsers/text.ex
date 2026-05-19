@@ -94,7 +94,7 @@ defmodule Combine.Parsers.Text do
       iex> import #{__MODULE__}
       ...> parser = take_while(fn ?a -> true; _ -> false end)
       ...> Combine.parse("aaaaabbbbb", parser)
-      ['aaaaa']
+      [~c"aaaaa"]
   """
   @spec take_while(previous_parser, (char -> boolean)) :: parser
   defparser take_while(%ParserState{status: :ok} = state, predicate) when is_function(predicate, 1) do

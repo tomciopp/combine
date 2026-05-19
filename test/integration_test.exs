@@ -156,7 +156,7 @@ defmodule Combine.Test do
     defstruct method: nil, uri: nil, http_version: nil, headers: []
   end
 
-  @tokens Enum.to_list(32..127) -- '()<>@,;:\\"/[]={} \t'
+  @tokens Enum.to_list(32..127) -- ~c"()<>@,;:\\\"/[]={} \t"
   @digits ?0..?9
   test "RFC-2616" do
     request_parser = sequence([
